@@ -1,6 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import urlpatterns
+
 from api import views
+from rest_framework.routers import SimpleRouter
+
+router = SimpleRouter()
+router.register('books', views.BookViewSet, basename='books')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,3 +19,5 @@ urlpatterns = [
     path('api/v1/auth/register/', include('dj_rest_auth.registration.urls')),
 
 ]
+
+urlpattern = urlpatterns + router.urls

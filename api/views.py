@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,6 +7,7 @@ from .models import BooksModel
 from .serializers import BookSerializer
 
 
+# list get
 class ListApiView(APIView):
     def get(self, request):
         book = BooksModel.objects.all()
@@ -18,6 +19,7 @@ class ListApiView(APIView):
         return Response(data)
 
 
+# list detail
 class ListDetailView(APIView):
     def get(self, request, pk):
         try:
@@ -33,6 +35,7 @@ class ListDetailView(APIView):
             }, status=status.HTTP_204_NO_CONTENT)
 
 
+# create
 class ListCreateView(APIView):
     def post(self, request):
         data = request.data
@@ -44,6 +47,21 @@ class ListCreateView(APIView):
             return Response(data)
 
 
+# update
+class ListUpdateView(APIView):
+    def put(self, request, pk):
+        book = get_object_or_404(BooksModel, id=pk)
+        data = request.data
+        serializer = BookSerializer(instance=book, data=data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            book_save = serializer.save()
+        return Response({
+            "status": True,
+            "massage": f"book {book_save}, updated successfull"
+        })
+
+
+# delete
 class ListDeleteView(APIView):
     def delete(self, request, pk):
         try:
@@ -60,14 +78,6 @@ class ListDeleteView(APIView):
             }, status.HTTP_400_BAD_REQUEST)
 
 
-class ListUpdateView(APIView):
-    def put(self, request, pk):
-        book = get_object_or_404(BooksModel, id=pk)
-        data = request.data
-        serializer = BookSerializer(instance=book,data=data,partial=True)
-        if serializer.is_valid(raise_exception=True):
-            book_save = serializer.save()
-        return Response({
-            "status":True,
-            "massage":f"book {book_save}, updated successfull"
-        })
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = BooksModel
+    serializer_class = BookSerializer

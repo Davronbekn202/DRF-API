@@ -59,9 +59,9 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': [
         # Everyone can access
-        # 'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.AllowAny'
         # Only authenticated users
-        'rest_framework.permissions.IsAuthenticated'
+        # 'rest_framework.permissions.IsAuthenticated'
         # Authenticated users can read, only admins can write
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
         # Only Django admin users
